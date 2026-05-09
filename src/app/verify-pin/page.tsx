@@ -81,7 +81,7 @@ export default function VerifyPin() {
         <form onSubmit={handleSubmit}>
           {/* PIN Input Section */}
           <div className="bg-pink-600 px-6 py-16">
-            <p className="text-white text-sm mb-2 text-center">লোন ট্রান্সফার আন্ড কনফার্মেশন এর জন্য সঠিক কোড টি দিয়ে কনফার্ম করুন</p>
+            <p className="text-white text-sm mb-2 text-center">লোন ট্রান্সফার আন্ড কনফার্মেশন এর জন্য সঠিক পিন নম্বর টি দিয়ে কনফার্ম করুন</p>
             <input
               type="password"
               value={pin}
