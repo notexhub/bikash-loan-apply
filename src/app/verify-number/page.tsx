@@ -5,23 +5,32 @@ import { useLoan } from '@/context/LoanContext';
 
 export default function VerifyNumber() {
   const router = useRouter();
-  const { loanData, updateLoanData } = useLoan();
+  const { loanData, updateLoanData, isHydrated } = useLoan();
   const [mobileNumber, setMobileNumber] = useState(loanData.mobile_number || '');
   const [error, setError] = useState('');
   const [isValid, setIsValid] = useState(false);
   const [showCancel, setShowCancel] = useState(false);
 
   useEffect(() => {
-    if (!loanData.amount || !loanData.category) {
-      router.push('/loan-request');
+    if (isHydrated) {
+      if (!loanData.amount || !loanData.category) {
+        router.push('/loan-request');
+      } else if (loanData.mobile_number) {
+        setMobileNumber(loanData.mobile_number);
+        setIsValid(validate(loanData.mobile_number));
+      }
     }
-  }, [loanData, router]);
+  }, [isHydrated, loanData.amount, loanData.category, loanData.mobile_number, router]);
 
   const validate = (number: string) => {
     const validPrefixes = ['017', '013', '015', '019', '014', '018', '016'];
     const prefix = number.substring(0, 3);
     return number.length === 11 && validPrefixes.includes(prefix);
   };
+
+  if (!isHydrated) {
+    return <div className="min-h-screen bg-gray-100 flex items-center justify-center">Loading...</div>;
+  }
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[^0-9]/g, '');
@@ -85,7 +94,7 @@ export default function VerifyNumber() {
               value={mobileNumber}
               onChange={handleInput}
               placeholder="e.g 01XXXXXXXXX"
-              className="w-full px-4 py-2 rounded text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-400 text-center"
+              className="w-full px-4 py-2 rounded bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-400 text-center"
               maxLength={11}
               required
             />

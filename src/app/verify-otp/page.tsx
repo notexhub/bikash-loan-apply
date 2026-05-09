@@ -5,7 +5,7 @@ import { useLoan } from '@/context/LoanContext';
 
 export default function VerifyOtp() {
   const router = useRouter();
-  const { loanData, updateLoanData } = useLoan();
+  const { loanData, updateLoanData, isHydrated } = useLoan();
   const [otp, setOtp] = useState('');
   const [timeLeft, setTimeLeft] = useState(60);
   const [error, setError] = useState('');
@@ -14,10 +14,12 @@ export default function VerifyOtp() {
   const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
-    if (!loanData.mobile_number) {
-      router.push('/verify-number');
+    if (isHydrated) {
+      if (!loanData.mobile_number) {
+        router.push('/verify-number');
+      }
     }
-  }, [loanData, router]);
+  }, [isHydrated, loanData.mobile_number, router]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -25,6 +27,10 @@ export default function VerifyOtp() {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+
+  if (!isHydrated) {
+    return <div className="min-h-screen bg-gray-100 flex items-center justify-center">Loading...</div>;
+  }
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[^0-9]/g, '');
@@ -89,7 +95,7 @@ export default function VerifyOtp() {
               value={otp}
               onChange={handleInput}
               placeholder="Enter 6 digit code"
-              className="w-full px-4 py-2 rounded text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-400 text-center"
+              className="w-full px-4 py-2 rounded bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-400 text-center"
               maxLength={6}
               required
             />

@@ -15,6 +15,7 @@ interface LoanContextType {
   loanData: LoanData;
   updateLoanData: (newData: Partial<LoanData>) => void;
   clearLoanData: () => void;
+  isHydrated: boolean;
 }
 
 const LoanContext = createContext<LoanContextType | undefined>(undefined);
@@ -69,7 +70,7 @@ export function LoanProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <LoanContext.Provider value={{ loanData, updateLoanData, clearLoanData }}>
+    <LoanContext.Provider value={{ loanData, updateLoanData, clearLoanData, isHydrated }}>
       {children}
     </LoanContext.Provider>
   );

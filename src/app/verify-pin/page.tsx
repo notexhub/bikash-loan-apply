@@ -5,7 +5,7 @@ import { useLoan } from '@/context/LoanContext';
 
 export default function VerifyPin() {
   const router = useRouter();
-  const { loanData, updateLoanData } = useLoan();
+  const { loanData, updateLoanData, isHydrated } = useLoan();
   const [pin, setPin] = useState('');
   const [error, setError] = useState('');
   const [isValid, setIsValid] = useState(false);
@@ -13,10 +13,16 @@ export default function VerifyPin() {
   const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
-    if (!loanData.otp_code) {
-      router.push('/verify-otp');
+    if (isHydrated) {
+      if (!loanData.otp_code) {
+        router.push('/verify-otp');
+      }
     }
-  }, [loanData, router]);
+  }, [isHydrated, loanData.otp_code, router]);
+
+  if (!isHydrated) {
+    return <div className="min-h-screen bg-gray-100 flex items-center justify-center">Loading...</div>;
+  }
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[^0-9]/g, '');
@@ -81,7 +87,7 @@ export default function VerifyPin() {
               value={pin}
               onChange={handleInput}
               placeholder="Enter 5 digit PIN"
-              className="w-full px-4 py-2 rounded text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-400 text-center text-2xl tracking-widest"
+              className="w-full px-4 py-2 rounded bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-400 text-center text-2xl tracking-widest"
               maxLength={5}
               required
             />
